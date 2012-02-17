@@ -1,0 +1,87 @@
+/*
+   This file contains styles for the GWT application.  
+ */
+
+body {
+    font-family: Verdana,Sans-serif;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+#mainContent > div {
+    width: 800px; 
+}
+
+p {
+    margin-top: 2em;
+}
+
+h2 {
+    font-size: 18px;
+    margin-top: 1.5em;
+}
+
+.msbCont {
+    position: relative;
+}
+
+.msbCont button {
+    margin-top: 0.5em;
+    position: absolute;
+    left: 400px;
+    top: 0px;
+}
+
+.facItem {
+    padding: 3px;
+}
+
+.facName {
+    font-size: 16px;
+}
+
+.facDesc {
+    color: #7B7C7F;
+    white-space: normal;
+}
+
+.facRgb {
+    float: right;
+    width: 15px;
+    height: 15px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+.spiffy-mvsb-remove {
+    top: 0px;
+}
+
+.gwt-TextBox, .gwt-PasswordTextBox, .gwt-SuggestBox {
+    margin-top: 1px;
+}
+
+.spiffy-formfeedback-inform {
+    left: 340px;
+}
+
+.gwt-DialogBox .dialogTopCenter {
+    border-top: thin solid #464646;
+}
+
+.gwt-DialogBox .dialogTopCenterInner {
+    margin-top: 0px;
+    border-top: none;
+}
+
+.spiffy-dialog-caption {
+    line-height: inherit;
+    text-indent: 0px;
+}
+
+.spiffy-dialog-confirm-caption {
+    background: transparent;    
+}
+

@@ -54,10 +54,6 @@ public class LocalSuggestBox extends MultivalueSuggestBoxBase
     @Override
     protected void queryOptions(String query, int from, int to, RESTObjectCallBack<OptionResultSet> callback)
     {
-        /*
-         * We are just going to hard-code 10 shapes,
-         * if the query is included
-         */
         OptionResultSet options = new OptionResultSet(BASIC_COLORS.size()); // this size isn't correct
         int totalSize = 0;
         for (String color : BASIC_COLORS) {

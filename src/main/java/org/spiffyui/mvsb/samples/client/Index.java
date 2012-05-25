@@ -18,6 +18,7 @@
 package org.spiffyui.mvsb.samples.client;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.spiffyui.client.MainFooter;
@@ -25,7 +26,9 @@ import org.spiffyui.client.MainHeader;
 import org.spiffyui.client.widgets.dialog.ConfirmDialog;
 import org.spiffyui.client.widgets.multivaluesuggest.MultivalueSuggestBox;
 import org.spiffyui.client.widgets.multivaluesuggest.MultivalueSuggestBoxBase;
+import org.spiffyui.client.widgets.multivaluesuggest.MultivalueSuggestBoxBase.Option;
 import org.spiffyui.client.widgets.multivaluesuggest.MultivalueSuggestRESTHelper;
+import org.spiffyui.mvsb.samples.client.FancyAutocompleter.FancyOption;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -49,6 +52,7 @@ public class Index implements EntryPoint
     private static Index g_index;
     private ConfirmDialog m_valueMapDlg;
     private ConfirmDialog m_valuesAsStringDlg;
+    private ConfirmDialog m_selectedOptionsDlg;
     private TextArea m_valuesAsStringText;
 
     /**
@@ -96,6 +100,7 @@ public class Index implements EntryPoint
         addMultiValuedFancy(panel);
         addLocalValues(panel);
         addValuesAsString(panel);
+        addFancier(panel);
         
         m_valueMapDlg = new ConfirmDialog("mvsb-results-dialog", "Value Map");
         m_valueMapDlg.setAutoHideEnabled(true);
@@ -247,5 +252,53 @@ public class Index implements EntryPoint
             }
         });
         
+    }
+    
+    private void addFancier(HTMLPanel panel)
+    {
+        final FancierAutocompleter msb = new FancierAutocompleter(new MultivalueSuggestRESTHelper("TotalSize", "Options", "DisplayName", "Value") {
+            
+            @Override
+            public String buildUrl(String q, int indexFrom, int indexTo)
+            {
+                return "multivaluesuggestboxexample/colors?q=" + q + "&indexFrom=" + indexFrom + "&indexTo=" + indexTo;
+            }
+        }, true);
+        msb.getFeedback().addStyleName("msg-feedback");
+        msb.setPageSize(8); //since each value takes up more space, let's cut the size.
+        
+        panel.add(msb, "fancier");        
+        createShowValuesButton(panel, msb, "fancier");
+        m_selectedOptionsDlg = new ConfirmDialog("mvsb-results-dialog", "Selected Options");
+        m_selectedOptionsDlg.setAutoHideEnabled(true);
+        m_selectedOptionsDlg.setModal(false);        
+        m_selectedOptionsDlg.addButton("mvsb-dialog-ok", "Close", "OK");
+        
+        final Button b = new Button("Get Selected Options");
+        panel.add(b, "fancier");
+        b.addClickHandler(new ClickHandler() {
+            
+            @Override
+            public void onClick(ClickEvent event)
+            {
+                List<Option> options = msb.getSelectedOptions();
+                StringBuffer sb = new StringBuffer();
+                for (Option o : options) {
+                    sb.append("<div class=\"facItem\">" +
+                                    "<div class=\"facRgb\" style=\"background-color: rgb" + ((FancyOption) o).getRgb() + "\">" +
+                                    "</div>" +
+                                    "<div class=\"facName\">" +
+                                    ((FancyOption) o).getName() +
+                                    "</div>" +
+                                    "<div class=\"facDesc\">" +
+                                        ((FancyOption) o).getDescription() +
+                                    "</div>" +
+                                "</div>");
+                }
+                m_selectedOptionsDlg.replaceDialogBodyContents(new HTML(sb.toString()));
+
+                m_selectedOptionsDlg.showRelativeTo(b); 
+            }
+        });
     }
 }

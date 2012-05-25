@@ -55,8 +55,18 @@ h2 {
     margin-top: 5px;
 }
 
+.facSelectedRgb {
+    float: left;
+    width: 15px;
+    height: 15px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    margin-right: 2px;
+    margin-top: 2px;
+}
+
 .spiffy-mvsb-remove {
-    top: 0px;
+    top: 1px;
 }
 
 .gwt-TextBox, .gwt-PasswordTextBox, .gwt-SuggestBox {
@@ -85,3 +95,5 @@ h2 {
     background: transparent;    
 }
 
+#mvsb-results-dialog_mainDlgBody .facItem {
+    border-bottom: 1px solid lightgray;

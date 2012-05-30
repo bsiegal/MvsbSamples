@@ -284,8 +284,8 @@ public class Index implements EntryPoint
                 List<Option> options = msb.getSelectedOptions();
                 StringBuffer sb = new StringBuffer();
                 for (Option o : options) {
-                    sb.append("<div class=\"facItem\">" +
-                                    "<div class=\"facRgb\" style=\"background-color: rgb" + ((FancyOption) o).getRgb() + "\">" +
+                    sb.append("<div class=\"facSoItem\">" +
+                                    "<div class=\"facSoRgb\" style=\"background-color: rgb" + ((FancyOption) o).getRgb() + "\">" +
                                     "</div>" +
                                     "<div class=\"facName\">" +
                                     ((FancyOption) o).getName() +

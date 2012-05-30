@@ -95,5 +95,19 @@ h2 {
     background: transparent;    
 }
 
-#mvsb-results-dialog_mainDlgBody .facItem {
+.facSoItem {
+    padding: 3px;
     border-bottom: 1px solid lightgray;
+}
+
+.facSoRgb {
+    float: left;
+    width: 25px;
+    height: 25px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    margin-right: 5px;
+    margin-top: 1px;
+}
+

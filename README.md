@@ -5,7 +5,7 @@ This project includes different uses of Spiffy UI's Multi-valued Suggest Box: si
 
 This project was created from the [Spiffy UI Framework](http://www.spiffyui.org) project creator, which builds a simple REST application with Apache Maven.
 
-![Multi-valued Suggest Box screen shot](/spiffyui/MvsbSamples/raw/master/mvsb_screenshot.png)
+![Multi-valued Suggest Box screen shot](/bsiegal/MvsbSamples/raw/master/mvsb_screenshot.png)
 
 
 Building and Running MvsbSamples

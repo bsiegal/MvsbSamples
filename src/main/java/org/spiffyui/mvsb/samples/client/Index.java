@@ -18,6 +18,7 @@
 package org.spiffyui.mvsb.samples.client;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.spiffyui.client.MainFooter;
@@ -25,7 +26,9 @@ import org.spiffyui.client.MainHeader;
 import org.spiffyui.client.widgets.dialog.ConfirmDialog;
 import org.spiffyui.client.widgets.multivaluesuggest.MultivalueSuggestBox;
 import org.spiffyui.client.widgets.multivaluesuggest.MultivalueSuggestBoxBase;
+import org.spiffyui.client.widgets.multivaluesuggest.MultivalueSuggestBoxBase.Option;
 import org.spiffyui.client.widgets.multivaluesuggest.MultivalueSuggestRESTHelper;
+import org.spiffyui.mvsb.samples.client.FancyAutocompleter.FancyOption;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -36,6 +39,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextArea;
 
 
 /**
@@ -46,6 +50,10 @@ public class Index implements EntryPoint
     private static final SpiffyUiHtml STRINGS = (SpiffyUiHtml) GWT.create(SpiffyUiHtml.class);
 
     private static Index g_index;
+    private ConfirmDialog m_valueMapDlg;
+    private ConfirmDialog m_valuesAsStringDlg;
+    private ConfirmDialog m_selectedOptionsDlg;
+    private TextArea m_valuesAsStringText;
 
     /**
      * The Index page constructor
@@ -91,6 +99,15 @@ public class Index implements EntryPoint
         addMultiValued(panel);
         addMultiValuedFancy(panel);
         addLocalValues(panel);
+        addValuesAsString(panel);
+        addFancier(panel);
+        
+        m_valueMapDlg = new ConfirmDialog("mvsb-results-dialog", "Value Map");
+        m_valueMapDlg.setAutoHideEnabled(true);
+        m_valueMapDlg.setModal(false);        
+        m_valueMapDlg.addButton("mvsb-dialog-ok", "Close", "OK");
+        
+        
     }
 
     private void addSingleValued(HTMLPanel panel)
@@ -182,16 +199,106 @@ public class Index implements EntryPoint
     private void showValues(MultivalueSuggestBoxBase msb, Button b)
     {
         Map<String, String> values = msb.getValueMap();
-        ConfirmDialog c = new ConfirmDialog("mvsb-results-dialog", "Value Map");
-        c.setAutoHideEnabled(true);
-        c.setModal(false);
-        
         StringBuffer sb = new StringBuffer();
         for (String key : values.keySet()) {
             sb.append("<div style=\"background-color:" + values.get(key) + "\">" + key + "</div>");
         }
-        c.replaceDialogBodyContents(new HTML(sb.toString()));
-        c.addButton("mvsb-dialog-ok", "Close", "OK");
-        c.showRelativeTo(b);
+        m_valueMapDlg.replaceDialogBodyContents(new HTML(sb.toString()));
+        m_valueMapDlg.showRelativeTo(b);
+    }
+    
+    private void addValuesAsString(HTMLPanel panel)
+    {
+        final FancyAutocompleter msb = new FancyAutocompleter(new MultivalueSuggestRESTHelper("TotalSize", "Options", "DisplayName", "Value") {
+            
+            @Override
+            public String buildUrl(String q, int indexFrom, int indexTo)
+            {
+                return "multivaluesuggestboxexample/colors?q=" + q + "&indexFrom=" + indexFrom + "&indexTo=" + indexTo;
+            }
+        }, true);
+        msb.getFeedback().addStyleName("msg-feedback");
+        msb.setPageSize(8); //since each value takes up more space, let's cut the size.
+        
+        panel.add(msb, "fancyGetSet");
+        
+        m_valuesAsStringDlg = new ConfirmDialog("mvsb-results-dialog", "Values as String");
+        m_valuesAsStringDlg.setAutoHideEnabled(true);
+        m_valuesAsStringDlg.setModal(false);
+        m_valuesAsStringText = new TextArea();
+        m_valuesAsStringDlg.replaceDialogBodyContents(m_valuesAsStringText);
+        m_valuesAsStringDlg.addButton("mvsb-vas-ok", "Close", "OK");
+        m_valuesAsStringDlg.addButton("mvsb-vas-set", "Set new value", "SET", new ClickHandler() {
+            
+            @Override
+            public void onClick(ClickEvent event)
+            {
+                msb.setValuesAsString(m_valuesAsStringText.getText());
+                m_valuesAsStringDlg.hide();
+            }
+        });
+        
+        final Button b = new Button("Get Values as String");
+        panel.add(b, "fancyGetSet");
+        b.addClickHandler(new ClickHandler() {
+            
+            @Override
+            public void onClick(ClickEvent event)
+            {
+                String values = msb.getValuesAsString();
+                m_valuesAsStringText.setText(values);
+                
+                m_valuesAsStringDlg.showRelativeTo(b); 
+            }
+        });
+        
+    }
+    
+    private void addFancier(HTMLPanel panel)
+    {
+        final FancierAutocompleter msb = new FancierAutocompleter(new MultivalueSuggestRESTHelper("TotalSize", "Options", "DisplayName", "Value") {
+            
+            @Override
+            public String buildUrl(String q, int indexFrom, int indexTo)
+            {
+                return "multivaluesuggestboxexample/colors?q=" + q + "&indexFrom=" + indexFrom + "&indexTo=" + indexTo;
+            }
+        }, true);
+        msb.getFeedback().addStyleName("msg-feedback");
+        msb.setPageSize(8); //since each value takes up more space, let's cut the size.
+        
+        panel.add(msb, "fancier");        
+        createShowValuesButton(panel, msb, "fancier");
+        m_selectedOptionsDlg = new ConfirmDialog("mvsb-results-dialog", "Selected Options");
+        m_selectedOptionsDlg.setAutoHideEnabled(true);
+        m_selectedOptionsDlg.setModal(false);        
+        m_selectedOptionsDlg.addButton("mvsb-dialog-ok", "Close", "OK");
+        
+        final Button b = new Button("Get Selected Options");
+        panel.add(b, "fancier");
+        b.addClickHandler(new ClickHandler() {
+            
+            @Override
+            public void onClick(ClickEvent event)
+            {
+                List<Option> options = msb.getSelectedOptions();
+                StringBuffer sb = new StringBuffer();
+                for (Option o : options) {
+                    sb.append("<div class=\"facSoItem\">" +
+                                    "<div class=\"facSoRgb\" style=\"background-color: rgb" + ((FancyOption) o).getRgb() + "\">" +
+                                    "</div>" +
+                                    "<div class=\"facName\">" +
+                                    ((FancyOption) o).getName() +
+                                    "</div>" +
+                                    "<div class=\"facDesc\">" +
+                                        ((FancyOption) o).getDescription() +
+                                    "</div>" +
+                                "</div>");
+                }
+                m_selectedOptionsDlg.replaceDialogBodyContents(new HTML(sb.toString()));
+
+                m_selectedOptionsDlg.showRelativeTo(b); 
+            }
+        });
     }
 }

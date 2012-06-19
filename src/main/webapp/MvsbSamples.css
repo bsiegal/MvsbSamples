@@ -55,8 +55,18 @@ h2 {
     margin-top: 5px;
 }
 
+.facSelectedRgb {
+    float: left;
+    width: 15px;
+    height: 15px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    margin-right: 2px;
+    margin-top: 2px;
+}
+
 .spiffy-mvsb-remove {
-    top: 0px;
+    top: 1px;
 }
 
 .gwt-TextBox, .gwt-PasswordTextBox, .gwt-SuggestBox {
@@ -83,5 +93,21 @@ h2 {
 
 .spiffy-dialog-confirm-caption {
     background: transparent;    
+}
+
+.facSoItem {
+    padding: 3px;
+    border-bottom: 1px solid lightgray;
+}
+
+.facSoRgb {
+    float: left;
+    width: 25px;
+    height: 25px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    margin-right: 5px;
+    margin-top: 1px;
 }
 

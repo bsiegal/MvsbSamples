@@ -21,8 +21,11 @@ package org.spiffyui.mvsb.samples.client;
 import org.spiffyui.client.JSONUtil;
 import org.spiffyui.client.widgets.multivaluesuggest.MultivalueSuggestBox;
 import org.spiffyui.client.widgets.multivaluesuggest.MultivalueSuggestRESTHelper;
+import org.spiffyui.client.widgets.multivaluesuggest.MultivalueSuggestBoxBase.Option;
 
 import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.HTMLPanel;
 
 /**
  * A subclass of MultivalueSuggestBox that shows suggestions in a fancier way.
@@ -78,8 +81,10 @@ public class FancyAutocompleter extends MultivalueSuggestBox
      */
     protected OptionSuggestion createOptionSuggestion(Option o, String fullText, String query)
     {
-        return new FancyOptionSuggestion((FancyOption) o, o.getName(), o.getValue(), fullText, query);
+        return new FancyOptionSuggestion((FancyOption) o, fullText, query);
     }
+    
+
     
     /**
      * A subclass of Option for extra fields to be included in the fancy suggestions list
@@ -118,18 +123,15 @@ public class FancyAutocompleter extends MultivalueSuggestBox
         }
     }
        
-        /**
+    /**
      * A subclass of OptionSuggestion that uses FancyOption to generate a fancy display string
      * for the suggestions list
      */
     public class FancyOptionSuggestion extends OptionSuggestion
     {   
-        FancyOption m_option;
-        
-        FancyOptionSuggestion(FancyOption o, String displ, String val, String replacePre, String query) 
+        FancyOptionSuggestion(FancyOption o, String replacePre, String query) 
         {
-            super(displ, val, replacePre, query);
-            m_option = o;
+            super(o, replacePre, query);
         }
         
         @Override
@@ -143,15 +145,16 @@ public class FancyAutocompleter extends MultivalueSuggestBox
              * then also add the description and Base in separate divs
              */
             return "<div class=\"facItem\">" +
-                        "<div class=\"facRgb\" style=\"background-color: rgb" + m_option.getRgb() + "\">" +
+                        "<div class=\"facRgb\" style=\"background-color: rgb" + ((FancyOption) getOption()).getRgb() + "\">" +
                         "</div>" +
                         "<div class=\"facName\">" +
                             display +
                         "</div>" +
                         "<div class=\"facDesc\">" +
-                            m_option.getDescription() +
+                        ((FancyOption) getOption()).getDescription() +
                         "</div>" +
                     "</div>";
         }
     }
+    
 }
